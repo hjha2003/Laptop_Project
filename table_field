@@ -1,0 +1,173 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+
+export default function ValidationTextFields() {
+  return (
+    <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <TextField
+          error
+          id="outlined-error"
+          label="Error"
+          defaultValue="Hello World"
+        />
+        <TextField
+          error
+          id="outlined-error-helper-text"
+          label="Error"
+          defaultValue="Hello World"
+          helperText="Incorrect entry."
+        />
+      </div>
+      <div>
+        <TextField
+          error
+          id="filled-error"
+          label="Error"
+          defaultValue="Hello World"
+          variant="filled"
+        />
+        <TextField
+          error
+          id="filled-error-helper-text"
+          label="Error"
+          defaultValue="Hello World"
+          helperText="Incorrect entry."
+          variant="filled"
+        />
+      </div>
+      <div>
+        <TextField
+          error
+          id="standard-error"
+          label="Error"
+          defaultValue="Hello World"
+          variant="standard"
+        />
+        <TextField
+          error
+          id="standard-error-helper-text"
+          label="Error"
+          defaultValue="Hello World"
+          helperText="Incorrect entry."
+          variant="standard"
+        />
+      </div>
+    </Box>
+  );
+}
+
+
+
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import {
+  DataGridPremium,
+  GridToolbar,
+  useGridApiRef,
+  useKeepGroupedColumnsHidden,
+} from '@mui/x-data-grid-premium';
+import { useDemoData } from '@mui/x-data-grid-generator';
+
+export default function DataGridPremiumDemo() {
+  const { data, loading } = useDemoData({
+    dataSet: 'Commodity',
+    rowLength: 100,
+    editable: true,
+    visibleFields: [
+      'commodity',
+      'quantity',
+      'filledQuantity',
+      'status',
+      'isFilled',
+      'unitPrice',
+      'unitPriceCurrency',
+      'subTotal',
+      'feeRate',
+      'feeAmount',
+      'incoTerm',
+    ],
+  });
+  const apiRef = useGridApiRef();
+
+  const initialState = useKeepGroupedColumnsHidden({
+    apiRef,
+    initialState: {
+      ...data.initialState,
+      rowGrouping: {
+        ...data.initialState?.rowGrouping,
+        model: ['commodity'],
+      },
+      sorting: {
+        sortModel: [{ field: '__row_group_by_columns_group__', sort: 'asc' }],
+      },
+      aggregation: {
+        model: {
+          quantity: 'sum',
+        },
+      },
+    },
+  });
+
+  return (
+    <Box sx={{ height: 520, width: '100%' }}>
+      <DataGridPremium
+        {...data}
+        apiRef={apiRef}
+        loading={loading}
+        disableRowSelectionOnClick
+        initialState={initialState}
+        slots={{ toolbar: GridToolbar }}
+      />
+    </Box>
+  );
+}
+
+
+
+import * as React from 'react';
+import FormControl, { useFormControl } from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
+
+function MyFormHelperText() {
+  const { focused } = useFormControl() || {};
+
+  const helperText = React.useMemo(() => {
+    if (focused) {
+      return 'This field is being focused';
+    }
+
+    return 'Helper text';
+  }, [focused]);
+
+  return <FormHelperText>{helperText}</FormHelperText>;
+}
+
+export default function UseFormControl() {
+  return (
+    <Box component="form" noValidate autoComplete="off">
+      <FormControl sx={{ width: '25ch' }}>
+        <OutlinedInput placeholder="Please enter text" />
+        <MyFormHelperText />
+      </FormControl>
+    </Box>
+  );
+}
+
+
+
+
+
+
+
+
